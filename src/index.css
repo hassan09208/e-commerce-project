@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-luxury-gray;
+  }
+  
+  body {
+    @apply bg-luxury-black text-luxury-white antialiased;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .glassmorphism {
+    @apply bg-luxury-black/70 backdrop-blur-xl border border-luxury-gray/30;
+  }
+  
+  .glassmorphism-light {
+    @apply bg-luxury-charcoal/50 backdrop-blur-lg border border-luxury-gray/20;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-luxury-platinum via-luxury-white to-luxury-platinum bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-luxury-gold via-luxury-goldLight to-luxury-gold bg-clip-text text-transparent;
+  }
+  
+  .btn-luxury {
+    @apply px-8 py-4 bg-luxury-gold text-luxury-black font-semibold tracking-wider uppercase text-sm transition-all duration-300 hover:bg-luxury-goldLight hover:scale-105 hover:shadow-lg hover:shadow-luxury-gold/20;
+  }
+  
+  .btn-luxury-outline {
+    @apply px-8 py-4 border-2 border-luxury-platinum text-luxury-platinum font-semibold tracking-wider uppercase text-sm transition-all duration-300 hover:bg-luxury-platinum hover:text-luxury-black hover:scale-105;
+  }
+  
+  .card-luxury {
+    @apply bg-luxury-charcoal/50 backdrop-blur-sm border border-luxury-gray/30 rounded-lg overflow-hidden transition-all duration-500 hover:border-luxury-gold/50 hover:shadow-xl hover:shadow-luxury-gold/10;
+  }
+  
+  .input-luxury {
+    @apply bg-luxury-dark/50 border border-luxury-gray/50 rounded-lg px-4 py-3 text-luxury-white placeholder-luxury-silver/50 focus:outline-none focus:border-luxury-gold/50 focus:ring-1 focus:ring-luxury-gold/50 transition-all duration-300;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
