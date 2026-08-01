@@ -1,13 +1,32 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import Product3DViewer from '../components/Product3DViewer';
+import { useState, useRef } from 'react';
 import { products, categories } from '../data/products';
 import { motion } from 'framer-motion';
 
 const Home = () => {
   const featuredProducts = products.filter(p => p.featured);
   const trendingProducts = products.filter(p => p.trending);
+
+  const watchImageRef = useRef(null);
+  const [watchRotate, setWatchRotate] = useState({ x: 0, y: 0 });
+
+  const handleWatchMouseMove = (e) => {
+    const el = watchImageRef.current;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -15;
+    const rotateY = ((x - centerX) / centerX) * 15;
+    setWatchRotate({ x: rotateX, y: rotateY });
+  };
+
+  const handleWatchMouseLeave = () => {
+    setWatchRotate({ x: 0, y: 0 });
+  };
 
   return (
     <div className="min-h-screen">
@@ -100,11 +119,20 @@ const Home = () => {
               transition={{ duration: 0.8 }}
               className="h-[500px]"
             >
-              <div className="card-luxury h-full overflow-hidden">
+              <div 
+                className="card-luxury h-full overflow-hidden"
+                style={{ perspective: '1000px' }}
+                onMouseMove={handleWatchMouseMove}
+                onMouseLeave={handleWatchMouseLeave}
+              >
                 <img 
+                  ref={watchImageRef}
                   src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80"
                   alt="Chronos Elite Watch"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-200 ease-out"
+                  style={{
+                    transform: `rotateX(${watchRotate.x}deg) rotateY(${watchRotate.y}deg)`
+                  }}
                 />
               </div>
             </motion.div>

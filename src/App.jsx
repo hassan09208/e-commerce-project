@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import Home from './pages/Home';
+import ScrollToTop from './components/ScrollToTop';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
 import Category from './pages/Category';
@@ -14,7 +15,11 @@ function App() {
   return (
     <CartProvider>
       <Router>
+  
+    <ScrollToTop />
         <div className="min-h-screen flex flex-col">
+    <Navbar />
+    ...
           <Navbar />
           <main className="flex-1">
             <Routes>
