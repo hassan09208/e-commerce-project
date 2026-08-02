@@ -1,10 +1,20 @@
 import { useParams, Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { useProducts } from '../context/ProductsContext';
 import { motion } from 'framer-motion';
 
 const Category = () => {
   const { categoryId } = useParams();
+  const { products, categories, loading } = useProducts();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <p className="text-luxury-white text-xl">Loading...</p>
+      </div>
+    );
+  }
+
   const category = categories.find(c => c.id === categoryId);
   const categoryProducts = products.filter(p => p.category === categoryId);
 

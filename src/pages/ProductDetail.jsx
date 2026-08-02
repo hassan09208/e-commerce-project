@@ -2,16 +2,16 @@ import { useParams, Link } from 'react-router-dom';
 import { Star, ShoppingCart, Check, ArrowLeft, Package, Award, Shield } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { useCart } from '../context/CartContext';
-import { products } from '../data/products';
+import { useProducts } from '../context/ProductsContext';
 import { motion } from 'framer-motion';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart, setIsCartOpen } = useCart();
+  const { products, loading } = useProducts();
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
-  // ---- NAYA CODE: 3D hover effect ke liye ----
   const imageRef = useRef(null);
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
 
@@ -30,9 +30,16 @@ const ProductDetail = () => {
   const handleMouseLeave = () => {
     setRotate({ x: 0, y: 0 });
   };
-  // ---- NAYA CODE KHATAM ----
 
-  const product = products.find(p => p.id === parseInt(id));
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <p className="text-luxury-white text-xl">Loading...</p>
+      </div>
+    );
+  }
+
+  const product = products.find(p => String(p.id) === String(id));
 
   if (!product) {
     return (
@@ -55,13 +62,10 @@ const ProductDetail = () => {
     setIsCartOpen(true);
   };
 
-  // ---- NAYA CODE: Buy Now function ----
   const handleBuyNow = () => {
     addToCart(product, currentVariant, quantity);
     setIsCartOpen(true);
-    // agar aapke pass checkout page hai to yahan navigate kar sakte ho
   };
-  // ---- NAYA CODE KHATAM ----
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -85,7 +89,6 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            {/* ---- CHANGE YAHAN: 3D hover wala div ---- */}
             <div 
               className="card-luxury h-[500px] lg:h-[600px] overflow-hidden"
               style={{ perspective: '1000px' }}
@@ -102,7 +105,6 @@ const ProductDetail = () => {
                 }}
               />
             </div>
-            {/* ---- CHANGE KHATAM ---- */}
           </motion.div>
 
           {/* Product Info */}
@@ -222,14 +224,12 @@ const ProductDetail = () => {
                 <ShoppingCart size={20} className="mr-2" />
                 Add to Cart
               </button>
-              {/* ---- CHANGE YAHAN: onClick add kiya ---- */}
               <button 
                 onClick={handleBuyNow}
                 className="btn-luxury-outline flex-1"
               >
                 Buy Now
               </button>
-              {/* ---- CHANGE KHATAM ---- */}
             </div>
 
             {/* Features */}
@@ -259,7 +259,7 @@ const ProductDetail = () => {
         >
           <h2 className="text-2xl font-serif font-bold text-gradient mb-6">Specifications</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {Object.entries(product.specifications).map(([key, value]) => (
+            {Object.entries(product.specifications || {}).map(([key, value]) => (
               <div key={key} className="flex justify-between py-3 border-b border-luxury-gray/20">
                 <span className="text-luxury-silver/70 capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
                 <span className="text-luxury-white font-medium">{value}</span>

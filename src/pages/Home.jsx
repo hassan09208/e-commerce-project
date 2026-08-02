@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { useState, useRef } from 'react';
-import { products, categories } from '../data/products';
+import { useProducts } from '../context/ProductsContext';
 import { motion } from 'framer-motion';
 
 const Home = () => {
+  const { products, categories, loading } = useProducts();
   const featuredProducts = products.filter(p => p.featured);
   const trendingProducts = products.filter(p => p.trending);
 
@@ -27,6 +28,14 @@ const Home = () => {
   const handleWatchMouseLeave = () => {
     setWatchRotate({ x: 0, y: 0 });
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-luxury-white text-xl">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">

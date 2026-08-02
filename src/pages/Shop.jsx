@@ -1,24 +1,33 @@
 import { useState } from 'react';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { useProducts } from '../context/ProductsContext';
 import { motion } from 'framer-motion';
 
 const Shop = () => {
+  const { products, categories, loading } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
 
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <p className="text-luxury-white text-xl">Loading...</p>
+      </div>
+    );
+  }
+
   const filteredProducts = products.filter(product => {
     if (selectedCategory !== 'all' && product.category !== selectedCategory) return false;
-    if (priceRange === 'low' && product.price > 1000) return false;
-    if (priceRange === 'medium' && (product.price < 1000 || product.price > 5000)) return false;
-    if (priceRange === 'high' && product.price < 5000) return false;
+    if (priceRange === 'low' && product.originalPrice > 1000) return false;
+    if (priceRange === 'medium' && (product.originalPrice < 1000 || product.originalPrice > 5000)) return false;
+    if (priceRange === 'high' && product.originalPrice < 5000) return false;
     return true;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === 'price-low') return a.price - b.price;
-    if (sortBy === 'price-high') return b.price - a.price;
+    if (sortBy === 'price-low') return a.originalPrice - b.originalPrice;
+    if (sortBy === 'price-high') return b.originalPrice - a.originalPrice;
     if (sortBy === 'rating') return b.rating - a.rating;
     return 0;
   });

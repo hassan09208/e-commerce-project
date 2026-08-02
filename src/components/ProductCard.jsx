@@ -12,7 +12,8 @@ const ProductCard = ({ product }) => {
     setIsCartOpen(true);
   };
 
-  const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+  const price = product.variants?.[0]?.price ?? product.originalPrice;
+  const discount = Math.round(((product.originalPrice - price) / product.originalPrice) * 100);
 
   return (
     <motion.div
@@ -81,12 +82,12 @@ const ProductCard = ({ product }) => {
 
           {/* Price */}
           <div className="flex items-center space-x-3">
-            <span className="text-luxury-gold font-bold text-xl">${product.price.toLocaleString()}</span>
-            {product.originalPrice > product.price && (
+            <span className="text-luxury-gold font-bold text-xl">${price.toLocaleString()}</span>
+                    {product.originalPrice > price && (
               <span className="text-luxury-silver/50 line-through text-sm">
-                ${product.originalPrice.toLocaleString()}
-              </span>
-            )}
+                   ${product.originalPrice.toLocaleString()}
+           </span>
+)}
           </div>
         </div>
       </Link>
